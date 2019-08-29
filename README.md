@@ -3,6 +3,8 @@
 
 Your own read-only minimal GitHub! [Gitlist](https://gitlist.org/) is cool, but it requires `git`, and therefore a *lot* of memory. This one do many of the features of GitHub|list, in less than 40 KB of a single file.
 
+A demo is [here](https://dev.yom.li/projects/ygg), so you can see Ygg showing it's own source code (and that's meta).
+
 ## Features
 
 - File explorer

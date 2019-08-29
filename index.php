@@ -6,7 +6,7 @@
 
 $config = [
 	'title' => '{{dir}}',
-	'description' => 'File explorer for git projects hosted on your own server. - https://dev.yom.li/project/ygg',
+	'description' => 'File explorer for git projects hosted on your own server. - https://dev.yom.li/projects/ygg',
 	'nav' => [
 		// Browseable subdirectories
 		// The first existing subdir will be used as index
