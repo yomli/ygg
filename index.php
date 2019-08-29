@@ -18,7 +18,7 @@ $config = [
 		// Can be subdirectories containing their own index
 		'links' => [
 			'docs' => 'docs',
-			'Fork on Github' => 'https://github.com/yomli/yomli-go'
+			'Fork on Github' => 'https://github.com/yomli/ygg'
 		]
 	],
 	'robots' => 'noindex, nofollow', // Avoid robots by default (it's mainly duplicate content anyway)
