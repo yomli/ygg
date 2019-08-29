@@ -36,14 +36,14 @@ You may have to edit some variables placed in the first lines of `index.php`. Al
 {
 	"title": "My cool project",
 	"nav": {
-		"browseable": [
+		"browseable": {
 			"Code": "src",
 			"Releases": "releases"
-		],
-		"links": [
+		},
+		"links": {
 			"Help": "docs",
 			"Fork me here": "https://github.com/name/repo"
-		]
+		}
 	}
 }
 ```
