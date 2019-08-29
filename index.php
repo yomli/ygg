@@ -31,7 +31,7 @@ $config = [
 	'syntax_highlighter' => [
 		'css' => '', // Path to the css of the syntax highlighter you use
 		'js' => '', // Path to the js of the syntax highlighter you use
-		'strip_numbers' => false
+		'strip_numbers' => false // Do not show the numbers (ie, if using a Prism.js' plugin)
 	]
 ];
 
