@@ -28,7 +28,7 @@ Just drop the `index.php` file in a directory containing a bunch of folders.
 wget https://raw.githubusercontent.com/yomli/ygg/master/index.php
 ```
 
-In its default state, Ygg will use the `master` folder as its index (the "Code" tab on GitHub) if it exists, else it will show the content of the `releases` folder.
+In its default state, Ygg will use the `master` folder as its index (the "Code" tab on GitHub) if it exists, else it will show the content of the `releases` folder. Configure Ygg if you want others folders to be browseable. Then open Ygg in your favorite browser so it can create the necessary `.htaccess`.
 
 ## Configuration
 
