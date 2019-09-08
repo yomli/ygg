@@ -695,6 +695,7 @@ if (empty($_path)) {
 		pre, code {
 			font-family: SFMono-Regular, Menlo, "DejaVu Sans Mono", Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 			font-size: 87.5%;
+			overflow-x: auto;
 		}
 		table {
 			width: 100%;
