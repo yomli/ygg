@@ -19,6 +19,8 @@ A demo is [here](https://dev.yom.li/projects/ygg), so you can see Ygg showing it
 
 - Apache with `mod_rewrite`
 - PHP 7.2+
+- PHP `zip` extension
+- PHP `json` extension
 
 ## Install
 
