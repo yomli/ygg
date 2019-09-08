@@ -1,4 +1,7 @@
 <?php
+// Ygg - File explorer for git projects hosted on your own server.
+// Copyright (c) 2019 yomli https://dev.yom.li/
+// This file may be used and distributed under the terms of the public license.
 
 // =============================
 // Configuration                
