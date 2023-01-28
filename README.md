@@ -8,17 +8,20 @@ A demo is [here](https://dev.yom.li/projects/ygg), so you can see Ygg showing it
 ## Features
 
 - File explorer
+- 🆕 Universal syntax highlight
 - Releases tab
 - Download the entire project or just one file
 - Raw view
 - Fuzzy search to find a file
+- 🆕 Share the line by clicking the line number
+- 🆕 Dark mode
 - RSS feed
 - Customizable
 
 ## Requirements
 
 - Apache with `mod_rewrite`
-- PHP 7.2+
+- PHP 7.4+
 - PHP `zip` extension
 - PHP `json` extension
 
@@ -68,8 +71,9 @@ By default, text files are rendered in plaintext. You can change that by editing
 	'css' => '/assets/css/Prism.css', // Path to the css of the syntax highlighter you use
 	'js' => '/assets/js/Prism.js', // Path to the js of the syntax highlighter you use
 	'strip_numbers' => false // Do not show the numbers (ie, if using a Prism.js' plugin)
-]	
+]
 ```
+URLs can be absolute or relative to the `index.php` file.
 
 ### Custom favicon
 

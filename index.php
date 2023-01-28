@@ -1,10 +1,10 @@
 <?php
 // Ygg - File explorer for git projects hosted on your own server.
-// Copyright (c) 2019 yomli https://dev.yom.li/
+// Copyright (c) 2023 yomli https://dev.yom.li/
 // This file may be used and distributed under the terms of the public license.
 
 // =============================
-// Configuration                
+// Configuration
 // =============================
 
 $config = [
@@ -39,10 +39,10 @@ $config = [
 ];
 
 // =============================
-// Global vars                
+// Global vars
 // =============================
 
-// We use getcwd and not __DIR__ so the file can be included 
+// We use getcwd and not __DIR__ so the file can be included
 // and paths will NOT be relative to this file
 $_root = getcwd() . DIRECTORY_SEPARATOR;
 $_webroot = dirname($_SERVER['PHP_SELF']) . '/';
@@ -60,7 +60,7 @@ if (!is_dir($_root . $_parent)) {
 }
 
 // =============================
-// Init                
+// Init
 // =============================
 
 ob_start();
@@ -102,7 +102,7 @@ if (file_exists($_index . '/.htaccess')) {
 }
 
 // =============================
-// Queries                
+// Queries
 // =============================
 
 if (isset($_GET['zip'])) {
@@ -114,7 +114,7 @@ if (isset($_GET['zip'])) {
 		downloadFile($zip_name, true);
 	}
 	exit;
-} elseif (isset($_GET['s'])) { 
+} elseif (isset($_GET['s'])) {
 	// Search
 	$search_items = array();
 	if (!empty($_GET['s'])) {
@@ -122,7 +122,7 @@ if (isset($_GET['zip'])) {
 		$files = totalFiles($_root . $_index);
 		$search_items = array('term' => $term, 'files' => fuzzySearch($term, $files['files']));
 	}
-} elseif (isset($_GET['d']) || isset($_GET['raw'])) { 
+} elseif (isset($_GET['d']) || isset($_GET['raw'])) {
 	// File download and raw
 	ob_end_clean();
 	$file = str_replace('?raw', '', $_root . $_path);
@@ -140,9 +140,9 @@ if (isset($_GET['zip'])) {
 		downloadFile($file);
 	}
 	exit;
-} elseif (isset($_GET['feed'])) { 
+} elseif (isset($_GET['feed'])) {
 	// RSS feed
-	// If no feed.rss or 
+	// If no feed.rss or
 	// last-modified feed.rss < last-modified file,
 	// generate the feed and serve it
 	ob_clean();
@@ -179,18 +179,18 @@ if (isset($_GET['zip'])) {
 }
 
 // =============================
-// Functions                
+// Functions
 // =============================
 
 /**
  * Iterate through an array of folders,
  * listing all files and subdirectories.
- * 
+ *
  * @param  array  $folders   Folders to list
  * @param  array  $filter    Files to filter
- * @return array  
- * 'files' = array, 
- * 'size' = total size, 
+ * @return array
+ * 'files' = array,
+ * 'size' = total size,
  * 'number' = number of files
  * 'extensions' = all the files' extensions sorted desc
  * 'mtime' = modified time of the freshest file
@@ -229,7 +229,7 @@ function totalFiles($folder, $filter = array('.', '..', '.git')) {
  * Archive multiple folders recursively.
  * Note that the date and extension will be added
  * to the $archive name.
- * 
+ *
  * @param  array   $files    Files to archive
  * @param  string  $archive  Name of the archive
  * @return bool
@@ -279,7 +279,7 @@ function downloadFile($file, $delete_after = false) {
 	$type = finfo_file($finfo, $file);
 	$type = reset(explode(';', $type));
 	finfo_close($finfo);
-	
+
 	ob_clean();
 	header('Content-Type:' . $type);
 	header('Content-Disposition: attachment; filename="' . basename($file) . '";');
@@ -322,8 +322,8 @@ function fuzzySearch($needle, $haystack) {
 }
 
 /**
- * Search $files in $dir directory 
- * for a file named $name when you do not 
+ * Search $files in $dir directory
+ * for a file named $name when you do not
  * know its extension.
  *
  * Yes, we could search the dir stripping
@@ -359,31 +359,31 @@ function searchFile($name, $files, $ext = array(''), $dir = '') {
  * With directories first, called by
  * a *sort() function.
  */
-function sortByName(array $a, array $b) { 
-	return ($a["isdir"] == $b["isdir"] ? $a["name"] > $b["name"] : $a["isdir"] < $b["isdir"]); 
+function sortByName(array $a, array $b) {
+	return ($a["isdir"] == $b["isdir"] ? $a["name"] > $b["name"] : $a["isdir"] < $b["isdir"]);
 }
 
 /**
  * From https://github.com/lorenzos/Minixed
- * 37.6 MB is better than 39487001 
+ * 37.6 MB is better than 39487001
  *
  * @param string $val   Value to humanize
  * @param int    $round Precision to round the value
  */
 function humanizeFilesize($val, $round = 0) {
 	$unit = array("","K","M","G","T","P","E","Z","Y");
-	do { 
-		$val /= 1024; 
-		array_shift($unit); 
+	do {
+		$val /= 1024;
+		array_shift($unit);
 	} while ($val >= 1000);
 	return sprintf("%.".intval($round)."f", $val) . " " . array_shift($unit) . "B";
 }
 
 /**
  * Return a more friendly date like
- * 'a minute ago', which is better when 
+ * 'a minute ago', which is better when
  * reading projects.
- * Not the most exquisite code, 
+ * Not the most exquisite code,
  * but the fastest…
  *
  * @param string $date Unix timestamp
@@ -446,6 +446,18 @@ function get404() {
 	');
 }
 
+/**
+ * Get full URL of a given path
+ */
+function getURL($path) {
+	global $_webroot;
+	// Test if contains host or begins with '/'
+	if (strpos($path, './') == false && strpos($path, '../') == false) {
+		return $path;
+	}
+	return $_webroot . $path;
+}
+
 /** TEMPLATE
  * Show the source of a file or downloads
  * it depending its mimetype
@@ -468,9 +480,14 @@ function showSource($file) {
 	finfo_close($finfo);
 	if (substr($type, 0, 4) == 'text') {
 		$file_array = file($file);
-		$html = '<code class="source-numbers no-select">' . implode(range(1, count($file_array)), '<br>') . '</code>';
+		$html = '<code class="source-numbers no-select">';
+		foreach(range(1, count($file_array)) as  $nb) {
+			$html .= '<a id="L'.$nb.'" href="#L'.$nb.'">'.$nb.'</a><br>';
+		}
+		$html .= '</code>';
+		//$html.= implode('<a id="L1" href="L1"></a><br><a ', range(1, count($file_array))) . '</code>';
 		$html .= '<pre class="source-pre">';
-		$html .= '<code class="language-' . pathinfo($file, PATHINFO_EXTENSION) . '">';
+		$html .= '<code class="language-' . pathinfo($file, PATHINFO_EXTENSION) . ' microlight">';
 		$html .= htmlspecialchars(implode($file_array));
 		$html .= '</code></pre>';
 		return $html;
@@ -481,7 +498,7 @@ function showSource($file) {
 }
 
 /** GLOBALS TEMPLATE
- * Show a colorful language bar like 
+ * Show a colorful language bar like
  * the one you could find on GitHub or GitLab.
  */
 function showStats() {
@@ -548,7 +565,7 @@ function showBreadcrumb() {
 }
 
 // =============================
-// Core                
+// Core
 // =============================
 
 // Get the navigation items
@@ -561,7 +578,7 @@ foreach ($merge as $name => $path) {
 		$path = trim($path, '/');
 		$is_active = false;
 		//$_parent = array_shift(explode('/', trim(dirname($_path), '/.')));
-		
+
 		// echo $path . ' ' . $_parent . ' ' . $_index . ' ' . $_path . '<br>';
 		if ( ($path == $_parent && !empty($_parent)) || ($path == $_index && empty($_parent)) ){
 			$is_active = true;
@@ -617,18 +634,18 @@ if (empty($_path)) {
 }
 
 // =============================
-// Template                
+// Template
 // =============================
 ?>
 
 <!DOCTYPE HTML>
 <html lang="en-US">
 <head>
-	
+
 	<meta charset="UTF-8">
 	<meta name="robots" content="<?= htmlentities($config['robots']) ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	
+
 	<title><?= htmlentities($config['title']) ?></title>
 	<meta name="description" content="<?= htmlentities($config['description']) ?>" />
 
@@ -640,7 +657,7 @@ if (empty($_path)) {
 
 	<style type="text/css">
 		/* Minimal CSS reset
-		Inspired by 
+		Inspired by
 		https://alligator.io/css/minimal-css-reset/ */
 		*,  *::before, *::after {
 			box-sizing: inherit;
@@ -667,7 +684,7 @@ if (empty($_path)) {
 			font-weight: 400;
 			line-height: 1.5;
 			color: #2e2e2e;
-			background: #f7f7f7;	
+			background: #f7f7f7;
 		}
 		h1, h2, h3, h4, h5, h6 {
 			margin-bottom: 0.5rem;
@@ -741,21 +758,18 @@ if (empty($_path)) {
 			align-items: center;
 			flex-wrap: wrap;
 		}
-		nav a {
+		nav a, nav a:hover, nav a:focus {
 			color: inherit;
-		}
-		nav a:hover, nav a:focus {
-			color: initial;
 		}
 		.button {
 			padding: 0.375em 0.75em;
 			border-radius: 3px;
-			box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+			box-shadow: 0 1px 2px rgba(0,0,0,.3);
 			color: currentColor;
 			cursor: pointer;
 		}
 		.button:hover, .button:focus {
-			background: rgba(150,150,150,0.1);
+			background: rgba(150,150,150,.1);
 		}
 		.button.primary {
 			background: #28a745;
@@ -765,7 +779,7 @@ if (empty($_path)) {
 			background: #269f42;
 		}
 		article {
-			border: 1px solid lightgray;
+			border: 1px solid rgba(128,128,128,.1);
 			border-radius: 3px;
 			margin-bottom: 3rem;
 		}
@@ -788,7 +802,6 @@ if (empty($_path)) {
 		}
 		.main-nav-list .active {
 			box-shadow: 0 3px 0 steelblue;
-			color: initial;
 			opacity: 1;
 		}
 		/* Index nav */
@@ -808,7 +821,7 @@ if (empty($_path)) {
 			outline: none;
 		}
 		.extensions-bar-color {
-			height: 0.5rem; 
+			height: 0.5rem;
 			font-size: 0px;
 		}
 		.extensions-bar-color:first-child {
@@ -826,12 +839,12 @@ if (empty($_path)) {
 		}
 		.extensions-list strong {
 			font-weight: normal;
-			color: initial;
+			color: inherit;
 		}
 		/* Alert box */
 		.alert {
-			background: rgba(150,150,150,0.1);
-			border: 1px solid lightgray;
+			background: rgba(150,150,150,.1);
+			border: 1px solid rgba(128,128,128,.1);
 			border-radius: 3px;
 			padding: 1rem;
 			font-size: 14px;
@@ -844,20 +857,22 @@ if (empty($_path)) {
 		.breadcrumb-item {
 			color: steelblue;
 		}
+		.breadcrumb-item:hover,
+		.breadcrumb-item:focus,
 		.breadcrumb-item:last-child {
-			color: initial;
+			color: inherit;
 		}
 		/* File explorer */
 		.file-explorer {
-			border: 1px solid lightgray;
+			border: 1px solid rgba(128,128,128,.1);
 			border-radius: 3px;
 			border-collapse: collapse;
 			color: gray;
 		}
 		.file-explorer thead {
-			background: rgba(150,150,150,0.1);
+			background: rgba(150,150,150,.1);
 			font-size: 14px;
-			border-bottom: 1px solid lightgray;
+			border-bottom: 1px solid rgba(128,128,128,.1);
 		}
 		.file-explorer,
 		.file-explorer thead,
@@ -865,16 +880,15 @@ if (empty($_path)) {
 			display: block;
 		}
 		.file-explorer tbody tr:hover {
-			background: rgba(150,150,150,0.1);
+			background: rgba(150,150,150,.1);
 		}
 		.file-explorer tr {
 			display: grid;
 			grid-template-columns: 50% auto auto;
 			grid-template-rows: auto;
 			grid-template-areas: "td td td";
-
 			padding: 0.5rem;
-			border-bottom: 1px solid lightgray;
+			border-bottom: 1px solid rgba(128,128,128,.1);
 		}
 		@media (min-width: 42rem) {
 			.file-explorer tr {
@@ -890,8 +904,8 @@ if (empty($_path)) {
 		/* Articles */
 		.readme-header,
 		.source-header {
-			background: rgba(150,150,150,0.1);
-			border-bottom: 1px solid lightgray;
+			background: rgba(150,150,150,.1);
+			border-bottom: 1px solid rgba(128,128,128,.1);
 			padding: 0.5rem;
 		}
 		.readme-header h1,
@@ -906,12 +920,16 @@ if (empty($_path)) {
 		/* Source */
 		.source-content {
 			display: flex;
+			gap: 0 0.5rem;
 		}
 		.source-numbers {
 			text-align: right;
 			color: gray;
 			padding: 0 0.5rem;
-			border-right: 1px solid lightgray;
+			border-right: 1px solid rgba(128,128,128,.1);
+		}
+		.source-numbers a {
+			color: inherit;
 		}
 		.source-header {
 			display: flex;
@@ -972,6 +990,7 @@ if (empty($_path)) {
 			margin-top: 2rem;
 			text-align: center;
 		}
+
 		/* Icons */
 		/* From https://iconsvg.xyz/ */
 		/* and https://icomoon.io/ */
@@ -1039,11 +1058,26 @@ if (empty($_path)) {
 			content: '';
 			background-image: url("data:image/svg+xml,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M10 5c0-1.11-.89-2-2-2a1.993 1.993 0 0 0-1 3.72v.3c-.02.52-.23.98-.63 1.38-.4.4-.86.61-1.38.63-.83.02-1.48.16-2 .45V4.72a1.993 1.993 0 0 0-1-3.72C.88 1 0 1.89 0 3a2 2 0 0 0 1 1.72v6.56c-.59.35-1 .99-1 1.72 0 1.11.89 2 2 2 1.11 0 2-.89 2-2 0-.53-.2-1-.53-1.36.09-.06.48-.41.59-.47.25-.11.56-.17.94-.17 1.05-.05 1.95-.45 2.75-1.25S8.95 7.77 9 6.73h-.02C9.59 6.37 10 5.73 10 5zM2 1.8c.66 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2C1.35 4.2.8 3.65.8 3c0-.65.55-1.2 1.2-1.2zm0 12.41c-.66 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2zm6-8c-.66 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2z'%3E%3C/path%3E%3C/svg%3E");
 		}
+
+		/* Dark mode */
+		@media screen and (prefers-color-scheme: dark) {
+			body {
+				background: #121212;
+			}
+			body,
+			nav ol, nav ul {
+				color: rgba(255,255,255,.8);
+			}
+			[class^="icon-"]::before {
+				-webkit-filter: invert(100%);
+				filter: invert(100%);
+			}
+		}
 </style>
 
 	<?php // Link to the syntax highlighter's CSS ?>
 	<?php if (!empty($config['syntax_highlighter']['css'])): ?>
-		<link rel="stylesheet" href="<?= $config['syntax_highlighter']['css'] ?>" />
+		<link rel="stylesheet" href="<?= getURL($config['syntax_highlighter']['css']) ?>" />
 		<?php if ($config['syntax_highlighter']['strip_numbers'] === true): ?>
 			<style>
 				.source-numbers { display: none; }
@@ -1062,7 +1096,7 @@ if (empty($_path)) {
 <header>
 	<h1 class="main-title"><a href="<?= $_webroot ?>"><?= $config['title'] ?></a></h1>
 	<p class="main-description"><?= $config['description'] ?></p>
-	
+
 	<nav role="navigation" aria-label="Main">
 		<ol class="main-nav-list">
 			<?php foreach ($nav_items as $item): ?>
@@ -1150,7 +1184,53 @@ if (empty($_path)) {
 		</div>
 	</article>
 	<?php if (!empty($config['syntax_highlighter']['js'])): ?>
-		<script src="<?= $config['syntax_highlighter']['js'] ?>"></script>
+		<script src="<?= getURL($config['syntax_highlighter']['js']) ?>"></script>
+	<?php elseif (!empty(pathinfo($_root . $_path, PATHINFO_EXTENSION))): ?>
+		<script type="text/javascript">
+			const hightlight = (code) => code
+				// Operators
+				.replaceAll(/\b(var|const|function|typeof|new|return|if|for|in|while|break|do|continue|switch|case|try|catch)([^a-z0-9\$_])/g,
+					'<span class="c-operator">$1</span>$2')
+				// Types
+				.replaceAll(/\b(RegExp|Boolean|Number|String|Array|Object|Function|this|true|false|NaN|undefined|null|Infinity)([^a-z0-9\$_])/g,
+					'<span class="c-type">$1</span>$2')
+				// Comments
+				.replaceAll(/(\/\*[^]*?\*\/|(\/\/)[^\n\r]+)/gim,'<span class="c-comment">$1</span>')
+				// Strings
+				.replaceAll(/('.*?')/g,'<span class="c-string">$1</span>')
+				// Variables & Function names
+				.replaceAll(/([a-z\_\$][a-z0-9_]*)(\s?([\(\)\[\];]|[=+\-\*,<]\s)|\s>)/gi,'<a id="var-$1" href="#var-$1" class="c-variable">$1</a>$2')
+				// Braces
+				.replaceAll(/(\{|\}|\]|\[|\|)/gi,'<span class="c-punctuation">$1</span>')
+				// Numbers
+				.replaceAll(/(0x[0-9a-f]*|\b(\d*\.)?([\d]+(e-?[0-9]*)?)\b)/gi,'<span class="c-atom">$1</span>')//|(0x[0-9abcdefx]*)
+				// Tabs (2 spaces)
+				//.replace(/\t/g,'  ')
+
+			document.querySelectorAll('pre > code')
+		    	.forEach((code) => {
+		        	code.innerHTML=hightlight(code.innerText)
+		    	});
+		</script>
+		<style>
+			code .c-type {font-weight:700}
+			code .c-variable, .c-type {color: #228}
+			code .c-operator {color: #708}
+			code .c-string {color:#a22}
+			code .c-punctuation {color:#666}
+			code .c-atom {color:#281}
+			code .c-comment, .c-comment * {color: #A70!important}
+			code *:target{background-color:#ff6}
+			@media screen and (prefers-color-scheme: dark) {
+				code .c-type {color:#DB9455;font-style:700}
+				code .c-operator {color: #B194B4}
+				code .c-variable {color: #83A1C1}
+				code .c-string {color:#D7C467}
+				code .c-atom {color: #B1BE59}
+				code .c-punctuation {color:inherit}
+				code .c-comment, .c-comment * {color: #999!important;opacity:.5}
+			}
+		</style>
 	<?php endif; ?>
 <?php endif; ?>
 
@@ -1168,15 +1248,14 @@ if (empty($_path)) {
 
 <?php ## Override JS ?>
 <?php if (!empty($config['override_js'])): ?>
-	<script src="<?= $config['override_js'] ?>"></script>
+	<script src="<?= getURL($config['override_js']) ?>"></script>
 <?php endif; ?>
 
 <?php if ($config['show_footer'] === true): ?>
 	<footer>
-		<p>Powered by <a href="https://github.com/yomli/ygg">Ygg</a> and cooked by <a href="https://dev.yom.li/">yomli</a>.</p>
+		<p><small>Powered by <a href="https://github.com/yomli/ygg">Ygg</a> and cooked by <a href="https://dev.yom.li/">yomli</a>.</small></p>
 	</footer>
 <?php endif; ?>
-
 	</div>
 </body>
 </html>
