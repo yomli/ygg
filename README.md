@@ -1,7 +1,7 @@
 # Ygg
 🗂️  File explorer for git projects hosted on your own server.
 
-Your own read-only minimal GitHub! [Gitlist](https://gitlist.org/) is cool, but it requires `git`, and therefore a *lot* of memory. This one do many of the features of GitHub|list, in less than 40 KB of a single file.
+Your own read-only minimal GitHub! [Gitlist](https://gitlist.org/) is cool, but it requires `git`, and therefore a *lot* of memory. This one does many of the features of GitHub|list, in less than 40 KB of a single file. The beauty of it is that **it doesn't even need git**, so you can update you code the way you like. A webhook support is provided below.
 
 A demo is [here](https://dev.yom.li/projects/ygg), so you can see Ygg showing it's own source code (and that's meta).
 
@@ -65,7 +65,7 @@ By default, README files are rendered in plaintext. You can change that by editi
 
 ### Syntax highlighter
 
-By default, text files are rendered in plaintext. You can change that by editing the variables of the `syntax_highlighter` array:
+By default, text files are rendered by a tiny universal syntax highlighter. By its nature, it's prone to error. You can change the syntax highlighter by editing the variables of the `syntax_highlighter` array:
 ```
 'syntax_highlighter' => [
 	'css' => '/assets/css/Prism.css', // Path to the css of the syntax highlighter you use
@@ -86,6 +86,33 @@ Any text contained in the `alert.txt` file in your directory will be displayed o
 ### Symbolic linked
 
 Since it's just one file, you can symlink it into any project directory, using for each one a custom `config.json`.
+
+### Using webhooks
+
+When you clone a repository on your computer, a folder called `.git` is created. If you upload this folder into, say, `/master`, and if your webhost permits it, you can place a simple php script alongside `ygg`:
+
+```php
+<?php
+if (isset($_GET["my-super-duper-secret-key"])) {
+	# Don't cache ourself
+	header("Cache-Control: max-age=1");
+	error_reporting(E_ALL);
+	ini_set("display_errors", 1);
+
+	$path = (!empty($_GET["p"])) ? trim(urldecode($_GET["p"]), DIRECTORY_SEPARATOR) : "master";
+
+	chdir(__DIR__ . DIRECTORY_SEPARATOR . $path);
+	# Uncomment the following 2 lines if you want to "force pull"
+	//shell_exec("git fetch --all");
+	//shell_exec("git reset --hard HEAD");
+	$output = shell_exec("git pull");
+	echo "<pre>$output</pre>";
+
+}
+
+exit();
+```
+This way, in GitHub, you can add a webhook for every commit to `https://my-domain.tld/my-pull-script.php?my-super-duper-secret-key`. Every time you commit your code on GitHub, the repository on your web hosting will be updated.
 
 ## License
 

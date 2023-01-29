@@ -1,0 +1,49 @@
+		<script type="text/javascript">
+			const hightlight = (code) => code
+				// PHP & XML/HTML Tags
+				.replaceAll(/(<)/g, '<span><</span>') // Mandatory, else innerHTML comments them with <!-- -->
+				// Strings
+				.replaceAll(/('.*?'|".*?")/g,'<span class="c-string">$1</span>')
+				// Operators
+				.replaceAll(/\b(var|const|function|typeof|new|return|if|for|in|while|break|do|continue|switch|case|try|catch)([^a-z0-9\$_])/g,
+					'<span class="c-operator">$1</span>$2')
+				// Types
+				.replaceAll(/\b(RegExp|Boolean|Number|String|Array|Object|Function|this|true|false|NaN|undefined|null|Infinity)([^a-z0-9\$_])/g,
+					'<span class="c-type">$1</span>$2')
+				// Comments
+				.replaceAll(/(\/\*[^]*?\*\/|(\/\/)[^\n\r]+)/gim,'<span class="c-comment">$1</span>')
+
+				// Variables & Function names
+				.replaceAll(/([a-z\_\$][a-z0-9_]*)(\s?([\(\)\[\];]|[=+\-\*,<]\s)|\s>)/gi,'<a id="var-$1" href="#var-$1" class="c-variable">$1</a>$2')
+				// Braces
+				.replaceAll(/(\{|\}|\]|\[|\|)/gi,'<span class="c-punctuation">$1</span>')
+				// Numbers
+				.replaceAll(/(0x[0-9a-f]*|\b(\d*\.)?([\d]+(e-?[0-9]*)?)\b)/gi,'<span class="c-atom">$1</span>')//|(0x[0-9abcdefx]*)
+				// Tabs (2 spaces)
+				//.replace(/\t/g,'  ')
+
+			document.querySelectorAll('pre > code')
+		    	.forEach((code) => {
+		        	code.innerHTML=hightlight(code.innerText)
+		    	});
+
+		</script>
+		<style>
+			code .c-type {font-weight:700}
+			code .c-variable, .c-type {color: #228}
+			code .c-operator {color: #708}
+			code .c-string {color:#a22}
+			code .c-punctuation {color:#666}
+			code .c-atom {color:#281}
+			code .c-comment, .c-comment * {color: #A70!important}
+			code *:target{background-color:#ff6}
+			@media screen and (prefers-color-scheme: dark) {
+				code .c-type {color:#DB9455;font-style:700}
+				code .c-operator {color: #B194B4}
+				code .c-variable {color: #83A1C1}
+				code .c-string {color:#D7C467}
+				code .c-atom {color: #B1BE59}
+				code .c-punctuation {color:inherit}
+				code .c-comment, .c-comment * {color: #999!important;opacity:.5}
+			}
+		</style>
