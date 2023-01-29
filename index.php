@@ -481,11 +481,11 @@ function showSource($file) {
 	if (substr($type, 0, 4) == 'text') {
 		$file_array = file($file);
 		$html = '<code class="source-numbers no-select">';
-		foreach(range(1, count($file_array)) as  $nb) {
+		//$html.= implode('<a id="L1" href="L1"></a><br><a ', range(1, count($file_array))) . '</code>';
+		foreach (range(1, count($file_array)) as  $nb) {
 			$html .= '<a id="L'.$nb.'" href="#L'.$nb.'">'.$nb.'</a><br>';
 		}
 		$html .= '</code>';
-		//$html.= implode('<a id="L1" href="L1"></a><br><a ', range(1, count($file_array))) . '</code>';
 		$html .= '<pre class="source-pre">';
 		$html .= '<code class="language-' . pathinfo($file, PATHINFO_EXTENSION) . ' microlight">';
 		$html .= htmlspecialchars(implode($file_array));
@@ -1188,6 +1188,8 @@ if (empty($_path)) {
 	<?php elseif (!empty(pathinfo($_root . $_path, PATHINFO_EXTENSION))): ?>
 		<script type="text/javascript">
 			const hightlight = (code) => code
+				// PHP & XML/HTML Tags
+				.replaceAll(/(<|<\?)/g, '<span>$1</span>') // Mandatory, else innerHTML comments them with <!-- -->
 				// Operators
 				.replaceAll(/\b(var|const|function|typeof|new|return|if|for|in|while|break|do|continue|switch|case|try|catch)([^a-z0-9\$_])/g,
 					'<span class="c-operator">$1</span>$2')
@@ -1197,7 +1199,7 @@ if (empty($_path)) {
 				// Comments
 				.replaceAll(/(\/\*[^]*?\*\/|(\/\/)[^\n\r]+)/gim,'<span class="c-comment">$1</span>')
 				// Strings
-				.replaceAll(/('.*?')/g,'<span class="c-string">$1</span>')
+				.replaceAll(/('.*?'|".*?")/g,'<span class="c-string">$1</span>')
 				// Variables & Function names
 				.replaceAll(/([a-z\_\$][a-z0-9_]*)(\s?([\(\)\[\];]|[=+\-\*,<]\s)|\s>)/gi,'<a id="var-$1" href="#var-$1" class="c-variable">$1</a>$2')
 				// Braces
@@ -1209,8 +1211,10 @@ if (empty($_path)) {
 
 			document.querySelectorAll('pre > code')
 		    	.forEach((code) => {
+		    		console.log(code.innerText);
 		        	code.innerHTML=hightlight(code.innerText)
 		    	});
+
 		</script>
 		<style>
 			code .c-type {font-weight:700}
@@ -1259,3 +1263,6 @@ if (empty($_path)) {
 	</div>
 </body>
 </html>
+		<?php
+ob_flush();
+?>
