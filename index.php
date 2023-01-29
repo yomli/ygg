@@ -577,9 +577,7 @@ foreach ($merge as $name => $path) {
 	if (is_dir($path) || preg_match('#(\S+://\S+)#', $path) === 1) {
 		$path = trim($path, '/');
 		$is_active = false;
-		//$_parent = array_shift(explode('/', trim(dirname($_path), '/.')));
 
-		// echo $path . ' ' . $_parent . ' ' . $_index . ' ' . $_path . '<br>';
 		if ( ($path == $_parent && !empty($_parent)) || ($path == $_index && empty($_parent)) ){
 			$is_active = true;
 		}
