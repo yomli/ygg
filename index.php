@@ -1261,6 +1261,3 @@ if (empty($_path)) {
 	</div>
 </body>
 </html>
-		<?php
-ob_flush();
-?>
