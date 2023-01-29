@@ -1187,7 +1187,9 @@ if (empty($_path)) {
 		<script type="text/javascript">
 			const hightlight = (code) => code
 				// PHP & XML/HTML Tags
-				.replaceAll(/(<|<\?)/g, '<span>$1</span>') // Mandatory, else innerHTML comments them with <!-- -->
+				.replaceAll(/(<)/g, '<span><</span>') // Mandatory, else innerHTML comments them with <!-- -->
+				// Strings
+				.replaceAll(/('.*?'|".*?")/g,'<span class="c-string">$1</span>')
 				// Operators
 				.replaceAll(/\b(var|const|function|typeof|new|return|if|for|in|while|break|do|continue|switch|case|try|catch)([^a-z0-9\$_])/g,
 					'<span class="c-operator">$1</span>$2')
@@ -1196,8 +1198,7 @@ if (empty($_path)) {
 					'<span class="c-type">$1</span>$2')
 				// Comments
 				.replaceAll(/(\/\*[^]*?\*\/|(\/\/)[^\n\r]+)/gim,'<span class="c-comment">$1</span>')
-				// Strings
-				.replaceAll(/('.*?'|".*?")/g,'<span class="c-string">$1</span>')
+
 				// Variables & Function names
 				.replaceAll(/([a-z\_\$][a-z0-9_]*)(\s?([\(\)\[\];]|[=+\-\*,<]\s)|\s>)/gi,'<a id="var-$1" href="#var-$1" class="c-variable">$1</a>$2')
 				// Braces
@@ -1209,7 +1210,6 @@ if (empty($_path)) {
 
 			document.querySelectorAll('pre > code')
 		    	.forEach((code) => {
-		    		console.log(code.innerText);
 		        	code.innerHTML=hightlight(code.innerText)
 		    	});
 
