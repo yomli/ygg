@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
  * Ygg - File explorer for git projects hosted on your own server.
  * Copyright (c) 2023 yomli https://dev.yom.li/
  * This file may be used and distributed under the terms of the public license.
@@ -71,7 +71,7 @@ ob_start();
 if (is_file($_root . 'config.json')) {
 	$json = json_decode(file_get_contents('config.json'), 1);
 	if ($json !== false) {
-		$config = array_merge($config, $json);
+		$config = array_replace_recursive($config, $json);
 	}
 }
 
@@ -637,7 +637,6 @@ if (empty($_path)) {
 // Template
 // =============================
 ?>
-
 <!DOCTYPE HTML>
 <html lang="en-US">
 <head>
