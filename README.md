@@ -1,7 +1,7 @@
 # Ygg
 🗂️  File explorer for git projects hosted on your own server.
 
-Your own read-only minimal GitHub! [Gitlist](https://gitlist.org/) is cool, but it requires `git`, and therefore a *lot* of memory. This one does many of the features of GitHub|list, in less than 40 KB of a single file. The beauty of it is that **it doesn't even need git**, so you can update you code the way you like. A webhook support is provided below.
+Your own read-only minimal GitHub! [Gitlist](https://gitlist.org/) is cool, but it requires `git`, and therefore a *lot* of memory. This one does many of the features of GitHub|list, in about 40 KB of a single file. The beauty of it is that **it doesn't even need git**, so you can update you code the way you like. A webhook support is provided below.
 
 A demo is [here](https://dev.yom.li/projects/ygg), so you can see Ygg showing it's own source code (and that's meta).
 
