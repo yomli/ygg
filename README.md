@@ -1,3 +1,5 @@
+Project transfered to https://codeberg.org/yomli/ygg
+
 # Ygg
 🗂️  File explorer for git projects hosted on your own server.
 
